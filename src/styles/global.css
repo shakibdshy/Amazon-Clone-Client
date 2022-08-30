@@ -1,0 +1,6 @@
+@tailwind base;
+a:hover {
+    color: #c45500;
+}
+@tailwind components;
+@tailwind utilities;
