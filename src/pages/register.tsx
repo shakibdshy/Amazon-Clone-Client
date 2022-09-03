@@ -2,6 +2,8 @@ import { Box, Button, Divider, Input, PaperProps, PasswordInput, Text, TextInput
 import { useForm } from '@mantine/form';
 import React, { FormEvent } from 'react'
 import AuthLayout from '../components/Auth/AuthLayout'
+import { showNotification } from '@mantine/notifications';
+import Link from 'next/link';
 
 const Register = (props: PaperProps) => {
   const form = useForm({
@@ -9,24 +11,36 @@ const Register = (props: PaperProps) => {
       email: '',
       name: '',
       password: '',
+      confirmPassword: '',
       terms: true,
     },
 
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
       password: (val) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
+      confirmPassword: (value, values) => value !== values.password ? 'Passwords did not match' : null,
     },
   });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => { 
-    event.preventDefault();
-    
+  const handleError = (errors: typeof form.errors) => {
+    if (errors.name) {
+      showNotification({ message: 'Please fill name field', color: 'red' });
+    } else if (errors.email) {
+      showNotification({ message: 'Please provide a valid email', color: 'red' });
+    }
+  };
+
+  const handleSubmit = (event: typeof form.values) => { 
+    form.reset()
+    console.log(event);
   }
+
+
   return (
     <AuthLayout>
       <Box style={{ width: '350px', maxWidth: "350px", border: '1px solid rgb(193, 194, 197)', borderRadius: '8px', padding: "14px 18px" }}>
         <Title order={3} size="h2" className=''>Create account</Title>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
           <TextInput
             label="Your name"
             placeholder="Your name"
@@ -83,9 +97,9 @@ const Register = (props: PaperProps) => {
             required
             label="Re-enter Password"
             placeholder="Your password"
-            value={form.values.password}
-            onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-            error={form.errors.password && 'Password should include at least 6 characters'}
+            value={form.values.confirmPassword}
+            onChange={(event) => form.setFieldValue('confirmPassword', event.currentTarget.value)}
+            error={form.errors.confirmPassword && 'Password should include at least 6 characters'}
             styles={(theme) => ({
               root: {
                 marginTop: theme.spacing.xs,
@@ -97,12 +111,23 @@ const Register = (props: PaperProps) => {
               }
             })}
           />
-          <Button variant="default" fullWidth={true} style={{ marginTop: "20px", background: "#f0c14b", borderColor: "#a88734 #9c7e31 #846a29", color: "#111" }}>Continue</Button>
+          <Button
+            type='submit'
+            variant="default"
+            fullWidth={true}
+            style={{
+              marginTop: "20px",
+              background: "#f0c14b",
+              borderColor: "#a88734 #9c7e31 #846a29",
+              color: "#111"
+            }}>
+            Continue
+          </Button>
         </form>
         
-        <p style={{ marginTop: "20px", marginRight: "45px", fontSize: "12px" }}>By creating an account, you agree to Amazon&lsquo;s <Text variant="link" component="a" href="/" style={{}}>Conditions</Text> of Use and <Text variant="link" component="a" href="/">Privacy Notice</Text>.</p>
+        <p style={{ marginTop: "20px", marginRight: "45px", fontSize: "12px" }}>By creating an account, you agree to Amazon&lsquo;s <Text variant="link" component="a" href="/">Conditions</Text> of Use and <Text variant="link" component="a" href="/">Privacy Notice</Text>.</p>
         <Divider my="xl" />
-        <p style={{ marginTop: "20px", marginRight: "45px", fontSize: "12px" }}>Already have an account? <Text variant="link" component="a" href="/signin">Sign-In</Text></p>
+        <p style={{ marginTop: "20px", marginRight: "45px", fontSize: "12px" }}>Already have an account? <Link href="signin"><a style={{ fontSize: "12px", color: "#4dabf7", textDecoration: "none" }}>Sign-In</a></Link></p>
       </Box>
     </AuthLayout>
   )

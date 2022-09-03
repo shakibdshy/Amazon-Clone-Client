@@ -6,5 +6,6 @@ body {
 a:hover {
     color: #c45500;
 }
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
