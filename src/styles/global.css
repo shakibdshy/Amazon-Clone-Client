@@ -1,4 +1,8 @@
-@tailwind base;
+body {
+    background-color: #25262b;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
 a:hover {
     color: #c45500;
 }

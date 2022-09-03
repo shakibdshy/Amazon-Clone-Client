@@ -9,7 +9,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
     const dark = colorScheme === "dark";
     return (
         <Container>
-            <Stack justify="center" align="center" style={{ height: '100vh' }}>
+            <Stack justify="center" align="center" style={{ marginTop: "40px"}}>
                 {
                     dark ? <Image src={logo} alt="amazon-logo" width={100} height={40} /> : <Image src={darkLogo} alt="amazon-logo" width={100} height={40} />
                 }
