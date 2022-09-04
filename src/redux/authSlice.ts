@@ -2,6 +2,7 @@ import authService from '../service/auth.service';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { DisplayUser } from "../type/user";
 import { Jwt } from '../type/Jwt';
+import { RootState } from './store';
 
 interface AsyncState {
     isLoading: boolean;
@@ -9,7 +10,7 @@ interface AsyncState {
     isError: boolean;
 }
 
-interface AuthState extends AsyncState { 
+interface AuthState extends AsyncState {
     user?: DisplayUser | null;
     jwt?: Jwt;
     isAuthenticated?: boolean;
@@ -25,7 +26,7 @@ const initialState: AuthState = {
 
 export const register = createAsyncThunk(
     'auth/register',
-    async (user: DisplayUser, thunkAPI) => { 
+    async (user: DisplayUser, thunkAPI) => {
         try {
             return authService.register(user);
         } catch (error) {
@@ -42,9 +43,9 @@ export const authSlice = createSlice({
             state.isLoading = false;
             state.isSuccess = false;
             state.isError = false;
-         }
+        }
     },
-    extraReducers: (builder) => { 
+    extraReducers: (builder) => {
         builder.addCase(register.pending, (state) => {
             state.isLoading = true;
             state.isSuccess = false;
@@ -64,5 +65,11 @@ export const authSlice = createSlice({
         });
     }
 })
+
+export const { reset } = authSlice.actions;
+
+export const selectedUser = (state: RootState) => {
+    return state.auth;
+}
 
 export default authSlice.reducer;

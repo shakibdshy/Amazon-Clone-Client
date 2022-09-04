@@ -1,10 +1,13 @@
 import axios from "axios";
 import { DisplayUser } from "../type/user";
 
-const register = async (newUser: DisplayUser): Promise<DisplayUser | null> => { 
-    const response = await axios.post(`${process.env.REACT_APP_BASE_API}/auth/register`, newUser);
+const register = async (newUser: DisplayUser): Promise<DisplayUser | null> => {
+    const { data } = await axios.post(`http://localhost:8080/auth/register`, newUser);
 
-    return response.data;
+    console.log(data);
+    
+
+    return data;
 }
 
 const authService = {

@@ -1,7 +1,9 @@
 export interface DisplayUser {
-    id: string;
+    id?: string;
     name: string;
     email: string;
+    password: string;
+    confirmPassword: string;
 }
 
 export interface DecodeJwt {

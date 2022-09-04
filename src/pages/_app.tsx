@@ -5,6 +5,7 @@ import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
+import { NotificationsProvider } from '@mantine/notifications';
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
@@ -38,9 +39,11 @@ export default function App(props: AppProps) {
             colorScheme,
           }}
         >
-          <Provider store={store}>
-            <Component {...pageProps} />
-          </Provider>
+          <NotificationsProvider>
+            <Provider store={store}>
+              <Component {...pageProps} />
+            </Provider>
+          </NotificationsProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>

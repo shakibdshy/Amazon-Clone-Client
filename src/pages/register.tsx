@@ -1,9 +1,13 @@
 import { Box, Button, Divider, Input, PaperProps, PasswordInput, Text, TextInput, Title } from '@mantine/core'
 import { useForm } from '@mantine/form';
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useEffect } from 'react'
 import AuthLayout from '../components/Auth/AuthLayout'
 import { showNotification } from '@mantine/notifications';
 import Link from 'next/link';
+import { useAppDispatch, useAppSelector } from '../hooks/redux/hook';
+import { register, reset } from '../redux/authSlice';
+import DisplayUser from '../type/user';
+import { NewUser } from '../type/NewUser';
 
 const Register = (props: PaperProps) => {
   const form = useForm({
@@ -30,9 +34,23 @@ const Register = (props: PaperProps) => {
     }
   };
 
-  const handleSubmit = (event: typeof form.values) => { 
-    form.reset()
+  const dispatch = useAppDispatch();
+  const { isLoading, isSuccess } = useAppSelector((state) => state.auth);
+
+  useEffect(() => { 
+    if (isSuccess) {
+      showNotification({ message: 'Registration successful', color: 'green' });
+      dispatch(reset());
+    }
+  }, [isSuccess, dispatch]);
+
+  const handleSubmit = (event: typeof form.values) => {
+    const DisplayUser = event;
+
+    dispatch(register(DisplayUser))
+
     console.log(event);
+    form.reset()
   }
 
 
