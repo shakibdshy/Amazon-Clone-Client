@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Input, PaperProps, PasswordInput, Text, TextInput, Title } from '@mantine/core'
+import { Box, Button, Center, Divider, Input, Loader, PaperProps, PasswordInput, Text, TextInput, Title } from '@mantine/core'
 import { useForm } from '@mantine/form';
 import React, { FormEvent, useEffect } from 'react'
 import AuthLayout from '../components/Auth/AuthLayout'
@@ -6,8 +6,6 @@ import { showNotification } from '@mantine/notifications';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../hooks/redux/hook';
 import { register, reset } from '../redux/authSlice';
-import DisplayUser from '../type/user';
-import { NewUser } from '../type/NewUser';
 
 const Register = (props: PaperProps) => {
   const form = useForm({
@@ -49,8 +47,16 @@ const Register = (props: PaperProps) => {
 
     dispatch(register(DisplayUser))
 
-    console.log(event);
+    // console.log(event);
     form.reset()
+  }
+
+  if (isLoading) {
+    return (
+      <Center style={{ height: "100vh" }}>
+        <Loader size="xl" />
+      </Center>
+    );
   }
 
 

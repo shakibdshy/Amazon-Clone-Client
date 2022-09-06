@@ -1,9 +1,11 @@
-import { Box, Button, Divider, Input, PaperProps, PasswordInput, Text, TextInput, Title } from '@mantine/core'
+import { Box, Button, Center, Divider, Input, Loader, PaperProps, PasswordInput, Text, TextInput, Title } from '@mantine/core'
 import { useForm } from '@mantine/form';
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useEffect } from 'react'
 import AuthLayout from '../components/Auth/AuthLayout'
 import { showNotification } from '@mantine/notifications';
 import Link from 'next/link';
+import { login, reset } from '../redux/authSlice';
+import { useAppDispatch, useAppSelector } from '../hooks/redux/hook';
 
 const SignIn = (props: PaperProps) => {
   const form = useForm({
@@ -27,9 +29,31 @@ const SignIn = (props: PaperProps) => {
     }
   };
 
+  const dispatch = useAppDispatch();
+  const { isLoading, isSuccess } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isSuccess) {
+      showNotification({ message: 'Login successful', color: 'green' });
+      dispatch(reset());
+    }
+  }, [isSuccess, dispatch]);
+
   const handleSubmit = (event: typeof form.values) => {
+    const DisplayUser = event;
+
+    dispatch(login(DisplayUser))
+
     form.reset()
     console.log(event);
+  }
+
+  if (isLoading) { 
+    return (
+      <Center style={{ height: "100vh"}}>
+        <Loader size="xl" />
+      </Center>
+    );
   }
 
 
