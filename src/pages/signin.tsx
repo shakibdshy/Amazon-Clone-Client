@@ -6,8 +6,10 @@ import { showNotification } from '@mantine/notifications';
 import Link from 'next/link';
 import { login, reset } from '../redux/authSlice';
 import { useAppDispatch, useAppSelector } from '../hooks/redux/hook';
+import { useRouter } from 'next/router';
 
 const SignIn = (props: PaperProps) => {
+  const router = useRouter();
   const form = useForm({
     initialValues: {
       email: '',
@@ -36,8 +38,9 @@ const SignIn = (props: PaperProps) => {
     if (isSuccess) {
       showNotification({ message: 'Login successful', color: 'green' });
       dispatch(reset());
+      router.push('/');
     }
-  }, [isSuccess, dispatch]);
+  }, [isSuccess, dispatch, router]);
 
   const handleSubmit = (event: typeof form.values) => {
     const DisplayUser = event;

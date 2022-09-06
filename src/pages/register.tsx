@@ -6,8 +6,11 @@ import { showNotification } from '@mantine/notifications';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../hooks/redux/hook';
 import { register, reset } from '../redux/authSlice';
+import { useRouter } from 'next/router';
 
 const Register = (props: PaperProps) => {
+  const router = useRouter();
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -37,15 +40,19 @@ const Register = (props: PaperProps) => {
 
   useEffect(() => { 
     if (isSuccess) {
-      showNotification({ message: 'Registration successful', color: 'green' });
       dispatch(reset());
+      showNotification({ message: 'Registration successful', color: 'green' });
     }
   }, [isSuccess, dispatch]);
-
+  
   const handleSubmit = (event: typeof form.values) => {
     const DisplayUser = event;
-
+    
     dispatch(register(DisplayUser))
+    
+    if (isSuccess) {
+      router.push('/');
+    }
 
     // console.log(event);
     form.reset()
