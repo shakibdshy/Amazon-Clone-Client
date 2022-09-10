@@ -6,11 +6,11 @@ import { DecodeJwt, DisplayUser, LoginUser } from "../type/user";
 
 const register = async (newUser: DisplayUser): Promise<DisplayUser | null> => {
     const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API}/auth/register`, newUser)
-    console.log(data);
+    // console.log(data);
     return data;
 }
 
-const login = async (user: LoginUser): Promise<Jwt> => {
+const login = async (user: LoginUser): Promise<{jwt: Jwt, user: DisplayUser | null} > => {
     const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API}/auth/login`, user);
 
     if (data) {
@@ -18,6 +18,8 @@ const login = async (user: LoginUser): Promise<Jwt> => {
 
         const decodedJwt: DecodeJwt = jwtDecode(data.token);
         localStorage.setItem('user', JSON.stringify(decodedJwt.user));
+
+        return { jwt: data, user: decodedJwt.user };
     }
 
     console.log(data);

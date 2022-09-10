@@ -112,8 +112,9 @@ export const authSlice = createSlice({
             state.isLoading = false;
             state.isSuccess = true;
             state.isError = false;
-            state.jwt = action.payload;
+            state.jwt = action.payload.jwt;
             state.isAuthenticated = true;
+            state.user = action.payload.user;
         });
         builder.addCase(login.rejected, (state) => {
             state.isLoading = false;
@@ -121,6 +122,7 @@ export const authSlice = createSlice({
             state.isError = true;
             state.user = null;
             state.isAuthenticated = false;
+            state.user = null;
         });
 
         // Logout
